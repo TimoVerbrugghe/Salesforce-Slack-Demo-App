@@ -1,0 +1,222 @@
+<template>
+    <lightning-card title="Setup" icon-name="utility:setup_assistant_guide">
+
+        <template if:true={showPage1}>
+            <div class="slds-p-horizontal_small">
+                    Welcome to the Slack Demo App! 👋<br>
+
+                    Using this app, you will be able to send and receive messages in Slack through Salesforce.<br><br>
+
+                    In this wizard, we will guide you through setting up the Slack Demo App. In short, you will do the following:<br><br>
+
+                <ul class="slds-list_dotted">
+                    <li>Create a Salesforce Site, so your Slack app can communicate with your Salesforce org.</li>
+                    <li>Create your own Slack App</li>
+                    <li>Add the Slack app to a channel of your choice and adding the info to Salesforce.</li>
+                    <li>Test your slack app by sending a message to your channel, using Salesforce.</li>
+                </ul>
+                <br>
+
+                <h3 class="slds-text-heading_small">Mandatory Prework Steps</h3>
+                    <div class="slds-p-around_medium">
+                        <h3><b>1. Get Access to the Slack Internal Sandbox</b></h3>
+                        Make sure you have access to the Salesforce Slack Internal Sandbox. This is done by clicking on the Slack Sandbox Tile at your Okta page. More information can be found in <a href={conciergeUrl} target="_blank"> this Concierge article</a>.
+                        <lightning-button variant="neutral" label="Go to Slack Sandbox" onclick={handleSlackSandboxClick} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button> 
+                        <br>
+                        <h3> <b>2. Open accompanying Quip Document</b></h3>
+                        Make sure you have the accompanying quip document open during the Setup which will guide you in more detail.
+                        <lightning-button variant="neutral" label="Open Quip Doc" icon-name="utility:quip" onclick={handleQuipDocClick} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>      
+                    </div>
+                <p class="slds-p-around_medium">Click Next to get started.</p>
+            </div>
+        </template>
+
+        <template if:true={showPage2}>
+            <div class="slds-p-around_medium">
+                <h3 class="slds-text-heading_small slds-align_absolute-center">Creating a Salesforce Site</h3>
+                <br>
+                    A Salesforce site is needed so that Slack can communicate with your Salesforce Org.<br>
+                    Slack will use this salesforce site to send a platform event when a user clicks a button in a Slack message, replies in a thread, uses a slash (/) comamnd, etc... You can then take action using f.e. Flow based on that platform event<br><br>
+                    Your site needs to be activated and a specific Apex Class needs to be added to the Public Access Settings. You can see instructions for this in the accompanying Quip Document (Setup instructions - Step 3: creating Salesforce Site).<br><br>
+                    <lightning-button variant="neutral" label="Open Quip Doc" icon-name="utility:quip" onclick={handleQuipDocClick} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>      
+                <br>
+                <lightning-input required class="slds-p-around_medium" type="text" label="Site Label" placeholder="The Label that you gave to your site" onchange={handleSiteNameChange}></lightning-input>
+            </div>
+        </template>
+
+        <template if:true={showPage3}>
+            <div class="slds-var-p-around_medium">
+                <h3 class="slds-text-heading_small slds-align_absolute-center">Creating and Installing your App</h3>
+                <p>
+                    In order to make a Slack App, we will need 2 things. First: a name for your app. This is the name that will be visible for other Slack users.
+                </p>
+                <lightning-input class="slds-p-around_medium" type="text" label="Your app name" placeholder="This name will be visible in Slack..." onchange={handleAppNameChange}></lightning-input>
+                <p>
+                    Secondly, we need your App Generation token. This is a token that you can get by going to api.slack.com/apps.
+                </p>
+                <lightning-input class="slds-p-around_medium" type="text" label="Your app token" onchange={handleTokenChange}></lightning-input>
+            
+                    <template if:true={isLoading}>
+                        <lightning-spinner  alternative-text="Loading" size="medium"></lightning-spinner><br>
+                    </template>
+                    <div class="slds-align_absolute-center">
+                        <lightning-button variant="neutral" disabled={disableButton} label="Create Slack App" icon-name="utility:builder" onclick={handleCreatingApp} class="slds-align_absolute-center"></lightning-button>
+                    </div>
+
+                    <template if:true={appCreated}>
+                        Now that your app is created, it's time to make the connection to your Salesforce Org. 🚀 <br>
+
+                        By clicking the "Add to Channel" button below, you will add your app to a channel of your choice AND you will provide Salesforce all the information it needs to start sending Slack messages to that channel. Click the button below, then in the page that opens, choose the channel you want to add your app to.<br><br>
+                        
+                        <lightning-button variant="Neutral" label="Add to Channel" icon-name="utility:topic2" onclick={handleAddToSlackClick} class="slds-align_absolute-center"></lightning-button>
+                    </template>
+
+            </div>
+        </template>
+
+        <template if:true={showPage4}>
+            <div class="slds-p-around_medium">
+                <h3 class="slds-text-heading_small slds-align_absolute-center">Congratulations! 🙌 </h3><br>
+                
+                You succesfully authenticated your Slack app and can now start sending messages!<br><br>
+
+                The following Slack app(s) have now been connected to your org:<br>
+                <ul class="slds-list_dotted">
+                    <template for:each={slackApps} for:item="app">
+                        <li key={app.Id}>{app.Name}</li>
+                    </template>
+                </ul>
+                <br>
+                The following Slack channel(s) have now been connected to your org:<br>
+                <ul class="slds-list_dotted">
+                    <template for:each={slackChannels} for:item="channel">
+                        <li key={channel.Id}>{channel.Name}</li>
+                    </template>
+                </ul>
+
+                <br>
+                Here are some next steps that you can take:
+                <br>
+
+                <lightning-accordion
+                         onsectiontoggle={handleToggleSection}
+                         active-section-name="Send a test message"
+                         allow-multiple-sections-open>
+                
+                    <lightning-accordion-section name="Send a test message" label="Send a test message">
+                        <div class="slds-p-around_medium">
+                        Send a predefined test message to one of the channels mentioned above. <br>
+                        <lightning-record-edit-form object-api-name="timoverbrugghe__Slack_Message__c" onsuccess={handleMessageSubmitSuccess}>
+                            <lightning-messages> </lightning-messages>
+                            <lightning-input-field field-name="timoverbrugghe__Message__c" value={testMessage} class="slds-hide"> </lightning-input-field>
+                            <lightning-input-field field-name="timoverbrugghe__Slack_Channel__c"> </lightning-input-field>
+                            <lightning-button
+                                class="slds-m-top_small slds-align_absolute-center"
+                                type="submit"
+                                label="Send Test Slack Message"
+                            >
+                            </lightning-button>
+                        </lightning-record-edit-form>
+                        </div>
+                    </lightning-accordion-section>
+                    
+                    <lightning-accordion-section name="Integrate with your demo" label="Integrate with your demo">
+                    
+                    <h3><b>Watch the demo video</b></h3>
+                    <div class="slds-p-around_medium">
+                        You can watch a short video in the quip doc which will explain how you can design your messages using the <a href={slackBlockKitUrl} target="_blank">Slack Block Kit Builder</a><br>
+                        <a href={quipDocUrl} target="_blank">Demo Video: building a Slack message in Block Kit Builder and sending it through the Slack Demo app.</a>
+                    </div>
+
+                    <h3><b>Sending Slack messages</b></h3>
+                        <div class="slds-p-around_medium">
+                        You can now send Slack messages by creating a "Slack Message" record. "Slack Message" is a custom object that is part of this app (you can see the tab for it at the top). When creating a new slack message, it will ask for a message (this is a piece of text that is generated when creating your message in the <a href={slackBlockKitUrl} target="_blank">Slack Block Kit Builder</a>) and a channel to post in.<br><br>
+                        When the record is created, the message is automatically sent.<br><br>
+
+                        Creating a record can be done manually, through Process Builder, Flow Builder, Apex code, etc... This means that you can now create and send Slack messages when f.e. 
+                        <ul class="slds-list_dotted">
+                            <li>Records are created, updated or deleted</li>
+                            <li>When a user goes through a screen flow</li>
+                            <li>On a specific schedule (f.e. sending reminders)</li>
+                            <li>etc...</li>
+                        </ul>
+                        <br>
+                        
+                        Check out the "Included Flows" tab at the top to see some example flows that are included in this package.
+                        </div>
+
+                    <h3><b>Receiving Slack responses (f.e. button presses)</b></h3>
+                    <div class="slds-p-around_medium">
+                        When somebody clicks on a button in a Slack message you sent, a Platform Event (Slack_Button_Clicked__e) will be created. This platform event will contain the value and action_id of your button (so you can act upon it) and a Thread ID, so you can send Slack messages back as a reply in the same thread.<br><br>
+                        You can act on a platform event through Flow Builder, Process Builder, Apex code, etc...<br><br>
+
+                        This means that you can now perform any number of actions in Salesforce when somebody clicks on a button:
+                        <ul class="slds-list_dotted">
+                            <li>Create, update or delete a record (such as cases, orders, etc...)</li>
+                            <li>Create new notes or activites on a record (such as tasks, calls, events, etc...)</li>
+                            <li>Send notifications or submit things for Approval</li>
+                            <li>etc...</li>
+                        </ul>                        
+                    </div>
+
+                    <h3><b>Example Flows</b></h3>
+                    <div class="slds-p-around_medium">
+                        Check out the "Included Flows" tab at the top to see some example flows that showcase how you can send Slack message and receive responses using flows.
+                    </div>
+                    </lightning-accordion-section>
+
+                    
+                    <lightning-accordion-section name="Learn about the Slack Block Kit Builder" label="Learn about the Slack Block Kit Builder">
+                        The <a href={slackBlockKitUrl} target="_blank">Slack Block Kit Builder</a> is a drag-and-drop tool that can be used to design your Slack Messages. With the tool, you can define the layout, buttons (and their values so that you can act upon it when people click on it) and rich text of your messages.<br><br>
+                        Here are some resources if you want to get to know this tool better:
+                        <ul class="slds-list_dotted">
+                            <li>
+                                <a href={quipDocUrl} target="_blank">Demo Video: building a Slack message in Block Kit Builder and sending it through the Slack Demo app.</a>
+                            </li>
+                            <li>
+                                Slack Developers: <a href="https://api.slack.com/block-kit/building" target="_blank">Building with Block Kit</a>
+                            </li>
+                            <li>
+                                Go to the <a href={slackBlockKitUrl} target="_blank">Slack Block Kit Builder</a>
+                            </li>
+                        </ul>
+                    </lightning-accordion-section>
+
+                    <lightning-accordion-section name="Enable hidden messages" label="Enable hidden messages (Only visible to you)">
+                        <div class="slds-p-around_medium">
+                            If you want to enable messages that are only meant for a specific user, hidden from others ("Only visible to you"), then you need to invite your app to the channel that you want to send a hidden message to.<br>
+                            You can do this by going to your channel and typing "/invite YOURAPPNAMEHERE".<br>
+                            Afterwards, you can enable the checkbox "Hidden Message?" when creating a Slack Message record.
+                        </div>
+                    </lightning-accordion-section>
+
+                    <lightning-accordion-section name="Add an additional slack channel" label="Add an additional slack channel ">
+                        <b>For advanced demos only</b><br>
+                        Does your demo require sending messages to multiple Slack Channels? Click on the "Add New Channel" tab at the top to connect an addtional slack channel. <br>
+                        Multiple Slack Apps are <b>NOT</b> supported at this time, but it's on the roadmap! 
+                    </lightning-accordion-section>
+                    
+                </lightning-accordion>
+                
+            </div>
+        </template>
+
+        <div slot="footer">
+			<lightning-layout horizontal-align="spread">
+				<lightning-layout-item size="1"></lightning-layout-item>
+				<lightning-layout-item size="10">
+					<lightning-progress-indicator current-step={currentStep} type="base" variant="base">
+						<lightning-progress-step label="Step 1" value="1" onclick={nextPage}></lightning-progress-step>
+						<lightning-progress-step label="Step 2" value="2" onclick={nextPage}></lightning-progress-step>
+						<lightning-progress-step label="Step 3" value="3" onclick={nextPage}></lightning-progress-step>
+						<lightning-progress-step label="Step 4" value="4" onclick={nextPage}></lightning-progress-step>
+					</lightning-progress-indicator>
+				</lightning-layout-item>
+				<lightning-layout-item size="1">
+					<lightning-button variant="brand" label="Next" onclick={handleClick}></lightning-button>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+
+    </lightning-card>
+</template>

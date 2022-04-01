@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Salesforce_URL</name>
+        <label>Get Salesforce URL</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <actionName>GetSalesforceURL</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Get_Slack_Channel</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <description>A flow that automatically sends a Slack Message when a new account is created. The slack message will give some information of the account and 3 buttons to view the account record in Salesforce, log a call on the account record or to request additional help. Other flows (found below) handle the actions for these buttons.</description>
+    <interviewLabel>Slack Example - Send message when account created {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>1 - Send message when account created (Slack Example)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Slack_Message</name>
+        <label>Create Slack Message</label>
+        <locationX>176</locationX>
+        <locationY>575</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <elementReference>SlackMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Slack_Channel__c</field>
+            <value>
+                <elementReference>Get_Slack_Channel.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Message__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Slack_Channel</name>
+        <label>Get Slack Channel</label>
+        <locationX>176</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Slack_Message</targetReference>
+        </connector>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Slack_Channel__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Salesforce_URL</targetReference>
+        </connector>
+        <object>Account</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <textTemplates>
+        <name>SlackMessage</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{
+	&quot;blocks&quot;: [
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;A new account has been assigned to you in Salesforce:&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;fields&quot;: [
+				{
+					&quot;type&quot;: &quot;mrkdwn&quot;,
+					&quot;text&quot;: &quot;*Name:*\n{!$Record.Name}&quot;
+				},
+				{
+					&quot;type&quot;: &quot;mrkdwn&quot;,
+					&quot;text&quot;: &quot;*Date Created:*\n{!$Record.CreatedDate}&quot;
+				}
+			]
+		},
+		{
+			&quot;type&quot;: &quot;actions&quot;,
+			&quot;elements&quot;: [
+				{
+					&quot;type&quot;: &quot;button&quot;,
+					&quot;url&quot;: &quot;{!Get_Salesforce_URL}/lightning/r/Account/{!$Record.Id}/view&quot;,
+					&quot;text&quot;: {
+						&quot;type&quot;: &quot;plain_text&quot;,
+						&quot;emoji&quot;: true,
+						&quot;text&quot;: &quot;:salesforce: View in Salesforce&quot;
+					}
+				},
+				{
+					&quot;type&quot;: &quot;button&quot;,
+					&quot;text&quot;: {
+						&quot;type&quot;: &quot;plain_text&quot;,
+						&quot;emoji&quot;: true,
+						&quot;text&quot;: &quot;:phone: Log Introduction Call&quot;
+					},
+					&quot;action_id&quot;: &quot;LogIntroductionCall&quot;,
+					&quot;value&quot;: &quot;{!$Record.Id}&quot;
+				},
+				{
+					&quot;type&quot;: &quot;button&quot;,
+					&quot;text&quot;: {
+						&quot;type&quot;: &quot;plain_text&quot;,
+						&quot;emoji&quot;: true,
+						&quot;text&quot;: &quot;:information_desk_person: Help Needed&quot;
+					},
+					&quot;action_id&quot;: &quot;Help Needed&quot;,
+					&quot;value&quot;: &quot;click_me_123&quot;
+				}
+			]
+		}
+	]
+}</text>
+    </textTemplates>
+</Flow>

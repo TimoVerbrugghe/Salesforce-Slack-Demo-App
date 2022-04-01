@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Add New Channel" icon-name="utility:anywhere_chat">
+        <template if:true={showAddChannel}>
+            <div class="slds-p-horizontal_small">
+                You can add a new channel for your app by clicking on the "Add to Slack" button below. <br>
+                <lightning-button variant="Neutral" label="Add to Slack" icon-name="utility:apex" onclick={handleAddToSlackClick} class="slds-align_absolute-center"></lightning-button>
+            </div>
+        </template>
+        <template if:false={showAddChannel}>
+            <div class="slds-p-horizontal_small">
+                Please follow the setup wizard to create your app and first channel. Afterwards, you will be able to add more channels. <br>
+            </div>
+        </template>
+    </lightning-card>
+</template>

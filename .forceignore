@@ -1,0 +1,32 @@
+# List files or directories below to ignore them when running force:source:push, force:source:pull, and force:source:status
+# More information: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_exclude_source.htm
+#
+
+# Ignore Salesforce Site related stuff
+**/classes/SiteLoginController.cls*
+**/classes/SiteLoginControllerTest.cls*
+**/classes/SiteRegisterController.cls*
+**/classes/SiteRegisterControllerTest.cls*
+**/classes/ChangePasswordController.cls*
+**/classes/ChangePasswordControllerTest.cls*
+**/classes/ForgotPasswordController.cls*
+**/classes/ForgotPasswordControllerTest.cls*
+**/classes/MyProfilePageController.cls*
+**/classes/MyProfilePageControllerTest.cls*
+**/staticresources/SiteSamples*
+**/pages
+**/sites
+**/components
+
+# Ignore Salesforce Profile Settings
+**/profilePasswordPolicies
+**/profileSessionSettings
+**/settings
+**/profiles
+
+# LWC configuration files
+**/jsconfig.json
+**/.eslintrc.json
+
+# LWC Jest
+**/__tests__/**

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Slack_Channel__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <deprecated>false</deprecated>
+    <description>The channel you want to send the message to.</description>
+    <externalId>false</externalId>
+    <label>Slack Channel</label>
+    <referenceTo>Slack_Channel__c</referenceTo>
+    <relationshipLabel>Slack Messages</relationshipLabel>
+    <relationshipName>Slack_Messages</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,26 @@
+{
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "SlackDemoApp",
+            "versionName": "Initial Release",
+            "versionNumber": "1.5.0.0",
+            "ancestorVersion": "1.4.0"
+        }
+    ],
+    "name": "SlackIntegration",
+    "namespace": "timoverbrugghe",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "52.0",
+    "packageAliases": {
+        "SlackDemoApp": "0Ho7Q000000CaW2SAK",
+        "SlackDemoApp@1.0.0-0": "04t7Q000000kyZRQAY",
+        "SlackDemoApp@1.0.0-1": "04t7Q000000kyZWQAY",
+        "SlackDemoApp@1.1.0-0": "04t7Q000000kyZbQAI",
+        "SlackDemoApp@1.2.0-0": "04t7Q000000kyZgQAI",
+        "SlackDemoApp@1.3.0-0": "04t7Q000000kyZqQAI",
+        "SlackDemoApp@1.4.0-0": "04t7Q000000kyZvQAI",
+        "SlackDemoApp@1.5.0-0": "04t7Q000000kya5QAA"
+    }
+}

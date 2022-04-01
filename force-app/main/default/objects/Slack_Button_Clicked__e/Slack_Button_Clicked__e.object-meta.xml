@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>A platform event that will publish the action id, value &amp; response url of a button clicked in Slack.</description>
+    <eventType>HighVolume</eventType>
+    <label>Slack Button Clicked</label>
+    <pluralLabel>Slack Buttons Clicked</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>

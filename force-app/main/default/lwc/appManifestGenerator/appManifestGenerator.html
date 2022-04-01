@@ -1,0 +1,12 @@
+<template>
+    <lightning-card icon-name="utility:apex" title="Generate App Manifest">
+        <p class="slds-p-horizontal_small">Click the button below to generate your Slack App Manifest</p>
+        <br>
+        <lightning-button variant="brand" label="Generate Manifest" onclick={handleManifestGeneration} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+            <template if:true={showManifest}>
+                <lightning-textarea name="input4" readonly value={code} label="Your app manifest" ></lightning-textarea>
+                <lightning-button variant="brand" label="Create my Slack App" onclick={handleSlackCreateAppClick} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+            </template>
+    </lightning-card>
+
+</template>

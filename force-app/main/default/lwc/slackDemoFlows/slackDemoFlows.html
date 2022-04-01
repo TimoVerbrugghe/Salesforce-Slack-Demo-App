@@ -1,0 +1,43 @@
+<template>
+	<lightning-card title="Demo Flows" icon-name="utility:flow">
+		<div class="slds-p-horizontal_small">
+			<p>This package comes by default with the following Demo Flows, which you are free to activate, deactivate or copy
+				to create your own Slack Demo Flows. By default, these flows aren't active.<br>
+			</p>
+			<lightning-layout multiple-rows="true" class="slds-p-around_medium" horizontal-align="spread">
+				<lightning-layout-item padding="around-small" size="12" class="c-container">
+					<lightning-layout horizontal-align="spread" vertical-align="center">
+						<lightning-layout-item  size="3" padding="around-small" class="slds-align_absolute-center">
+							<h3 class="slds-text-heading_small slds-align_absolute-center">Title</h3><br>
+						</lightning-layout-item>
+						<lightning-layout-item size="6" padding="around-small" class="slds-align_absolute-center">
+							<h3 class="slds-text-heading_small slds-align_absolute-center">Description</h3><br>
+						</lightning-layout-item>
+						<lightning-layout-item size="3" padding="around-small" class="slds-align_absolute-center">
+							<h3 class="slds-text-heading_small slds-align_absolute-center">Actions</h3><br>
+						</lightning-layout-item>
+					</lightning-layout>
+				</lightning-layout-item>
+
+
+				<template for:each={slackDemoFlows} for:item="demoflow">
+					<lightning-layout-item key={demoflow.LatestVersionId} padding="around-small" size="12" class="c-container">
+						<lightning-layout horizontal-align="spread" vertical-align="center">
+							<lightning-layout-item  size="3" padding="around-small" class="slds-align_absolute-center">
+								<p> {demoflow.Label} </p>
+							</lightning-layout-item>
+							<lightning-layout-item size="6" padding="around-small" class="slds-align_absolute-center">
+								<p> {demoflow.Description} </p>
+							</lightning-layout-item>
+							<lightning-layout-item size="3" padding="around-small">
+								<lightning-button variant="Neutral" label="Open Flow" icon-name="utility:flow"
+									class="slds-align_absolute-center" value={demoflow.LatestVersionId} onclick={handleOpenFlow}></lightning-button>
+							</lightning-layout-item>
+						</lightning-layout>
+					</lightning-layout-item>
+				</template>
+
+			</lightning-layout>
+		</div>
+	</lightning-card>
+</template>

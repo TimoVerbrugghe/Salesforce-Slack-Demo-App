@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <logo>slacklogo</logo>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>An app to easily send demo messages to Slack, using apex, records and flows!</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>true</isNavPersonalizationDisabled>
+    <label>Slack Demos</label>
+    <navType>Standard</navType>
+    <tabs>Slack_Demo_Home</tabs>
+    <tabs>Slack_App__c</tabs>
+    <tabs>Slack_Channel__c</tabs>
+    <tabs>Slack_Home__c</tabs>
+    <tabs>Slack_Message__c</tabs>
+    <tabs>Slack_Modal__c</tabs>
+    <tabs>Slack_Response__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Slack_Demos_UtilityBar</utilityBar>
+</CustomApplication>

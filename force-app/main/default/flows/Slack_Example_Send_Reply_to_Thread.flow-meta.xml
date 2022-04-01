@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>Call_for_help_requested</name>
+        <label>Call for help requested</label>
+        <locationX>182</locationX>
+        <locationY>194</locationY>
+        <defaultConnectorLabel>Action ID is NOT Help Needed</defaultConnectorLabel>
+        <rules>
+            <name>Help_needed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.timoverbrugghe__Action_ID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Help Needed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Slack_Channel</targetReference>
+            </connector>
+            <label>Help needed</label>
+        </rules>
+    </decisions>
+    <description>(Works together with 1 - Send message after account creation)
+A flow that triggers when somebody clicks on a button in Slack (which launches a platform event called &quot;Slack Button Clicked&quot;). This platform event contains an &quot;action ID&quot; (that you set yourself in the Slack Block Kit Builder). When the action ID is &quot;HelpNeeded&quot;, the flow will send a new Slack Message as a reply in the thread of the message.</description>
+    <interviewLabel>Slack Example - Send Reply to Thread {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>2 - Send Reply to Thread (Slack Example)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Send_Slack_Message</name>
+        <label>Send Slack Message</label>
+        <locationX>50</locationX>
+        <locationY>434</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <elementReference>SlackMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Slack_Channel__c</field>
+            <value>
+                <elementReference>Get_Slack_Channel.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Thread_ID__c</field>
+            <value>
+                <elementReference>$Record.Thread_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Message__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Slack_Channel</name>
+        <label>Get Slack Channel</label>
+        <locationX>50</locationX>
+        <locationY>314</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Slack_Message</targetReference>
+        </connector>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Slack_Channel__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Call_for_help_requested</targetReference>
+        </connector>
+        <object>Slack_Button_Clicked__e</object>
+        <triggerType>PlatformEvent</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <textTemplates>
+        <name>SlackMessage</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{
+	&quot;blocks&quot;: [
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;Thanks for reaching out for help! Your manager has been notified and will discuss the account with you shortly.&quot;
+			}
+		}
+	]
+}</text>
+    </textTemplates>
+</Flow>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>If_Action_ID_LogIntroductionCall</name>
+        <label>If Action ID = &quot;LogIntroductionCall&quot;</label>
+        <locationX>182</locationX>
+        <locationY>194</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Action_ID_is_LogIntroductionCall</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.timoverbrugghe__Action_ID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>LogIntroductionCall</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Log_a_Call</targetReference>
+            </connector>
+            <label>Action ID is LogIntroductionCall</label>
+        </rules>
+    </decisions>
+    <description>(Works together with 1 - Send message when account created)
+
+A flow that triggers when somebody clicks on a button in Slack (which launches a platform event called &quot;Slack Button Clicked&quot;). This platform event contains an &quot;action ID&quot; (that you set yourself in the Slack Block Kit Builder). When the action ID is &quot;LogIntroductionCall&quot;, the flow will create a completed task on an account record. It gets it&apos;s account record ID from the value field  of the platform event.</description>
+    <interviewLabel>Slack Example - Log a call when slack button is clicked {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>3 - Log a call when slack button is clicked (Slack Example)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Log_a_Call</name>
+        <label>Log a Call</label>
+        <locationX>50</locationX>
+        <locationY>314</locationY>
+        <connector>
+            <targetReference>Get_Slack_Channel</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>CallType</field>
+            <value>
+                <stringValue>Outbound</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>This Introduction Call was logged through Slack.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Introduction Call</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TaskSubtype</field>
+            <value>
+                <stringValue>Call</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Value__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Send_success_message_to_user</name>
+        <label>Send success message to user</label>
+        <locationX>50</locationX>
+        <locationY>554</locationY>
+        <inputAssignments>
+            <field>Message__c</field>
+            <value>
+                <elementReference>SlackSuccessMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Only_visible_to_you__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Slack_Channel__c</field>
+            <value>
+                <elementReference>Get_Slack_Channel.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Message__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Slack_Channel</name>
+        <label>Get Slack Channel</label>
+        <locationX>50</locationX>
+        <locationY>434</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_success_message_to_user</targetReference>
+        </connector>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Slack_Channel__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>If_Action_ID_LogIntroductionCall</targetReference>
+        </connector>
+        <object>Slack_Button_Clicked__e</object>
+        <triggerType>PlatformEvent</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <textTemplates>
+        <name>SlackSuccessMessage</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{
+	&quot;blocks&quot;: [
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;Great job! We&apos;ve logged your introduction call on the account page in Salesforce.&quot;
+			}
+		}
+	]
+}</text>
+    </textTemplates>
+</Flow>

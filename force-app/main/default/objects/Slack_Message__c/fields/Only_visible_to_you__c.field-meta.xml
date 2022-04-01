@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_visible_to_you__c</fullName>
+    <defaultValue>false</defaultValue>
+    <deprecated>false</deprecated>
+    <description>Check this if you want to send a &quot;Only visible to you&quot; Slack message, which is only visible for one slack user, not for the rest of the channel.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Check this if you want to send a &quot;Only visible to you&quot; Slack message, which is only visible for one slack user, not for the rest of the channel.</inlineHelpText>
+    <label>Hidden Message?</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
