@@ -4,7 +4,7 @@
     <decisions>
         <name>OptIntoCampaign_Clicked</name>
         <label>OptIntoCampaign Clicked</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>194</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -17,6 +17,9 @@
                     <stringValue>OptIntoCampaign</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Send_Slack_Modal</targetReference>
+            </connector>
             <label>OptIntoCampaign was clicked</label>
         </rules>
     </decisions>
@@ -41,8 +44,28 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <start>
+    <recordCreates>
+        <name>Send_Slack_Modal</name>
+        <label>Send Slack Modal</label>
         <locationX>50</locationX>
+        <locationY>314</locationY>
+        <inputAssignments>
+            <field>Modal__c</field>
+            <value>
+                <stringValue>{ 	&quot;type&quot;: &quot;modal&quot;, 	&quot;title&quot;: { 		&quot;type&quot;: &quot;plain_text&quot;, 		&quot;text&quot;: &quot;My App&quot;, 		&quot;emoji&quot;: true 	}, 	&quot;submit&quot;: { 		&quot;type&quot;: &quot;plain_text&quot;, 		&quot;text&quot;: &quot;Submit&quot;, 		&quot;emoji&quot;: true 	}, 	&quot;close&quot;: { 		&quot;type&quot;: &quot;plain_text&quot;, 		&quot;text&quot;: &quot;Cancel&quot;, 		&quot;emoji&quot;: true 	}, 	&quot;blocks&quot;: [ 		{ 			&quot;type&quot;: &quot;section&quot;, 			&quot;text&quot;: { 				&quot;type&quot;: &quot;mrkdwn&quot;, 				&quot;text&quot;: &quot;You are about to opt your region into the following campaign.\n\n*Click Submit to confirm your interest in this campaign.*&quot; 			} 		}, 		{ 			&quot;type&quot;: &quot;divider&quot; 		}, 		{ 			&quot;type&quot;: &quot;section&quot;, 			&quot;text&quot;: { 				&quot;type&quot;: &quot;mrkdwn&quot;, 				&quot;text&quot;: &quot;&gt;*Campaign Name:*\n&gt;Best Day Ever\n&gt;*Campaign Type:*\n&gt;Video\n&gt;*When:*\n&gt;Winter-Spring 2022&quot; 			}, 			&quot;accessory&quot;: { 				&quot;type&quot;: &quot;image&quot;, 				&quot;image_url&quot;: &quot;https://files.slack.com/files-pri/TDU0K41E1-F032L3N4DCN/screen_shot_2022-02-11_at_12.55.40_pm.png?pub_secret=bc8cae9b7a&quot;, 				&quot;alt_text&quot;: &quot;plants&quot; 			} 		}, 		{ 			&quot;type&quot;: &quot;divider&quot; 		}, 		{ 			&quot;type&quot;: &quot;context&quot;, 			&quot;elements&quot;: [ 				{ 					&quot;type&quot;: &quot;mrkdwn&quot;, 					&quot;text&quot;: &quot;:nike: _All sales are final! Just kidding, you can remove your region from this campaign at a later day, if you so choose._&quot; 				} 			] 		} 	] }</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Trigger_ID__c</field>
+            <value>
+                <elementReference>$Record.Trigger_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Modal__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>OptIntoCampaign_Clicked</targetReference>

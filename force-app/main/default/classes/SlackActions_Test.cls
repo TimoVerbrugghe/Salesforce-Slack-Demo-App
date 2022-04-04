@@ -1,6 +1,32 @@
 @isTest
 public class SlackActions_Test {
 
+    @isTest static void testSendSlackModal() {
+        Slack_App__c slackApp = SlackTestDataFactory.createSlackApp();
+        Slack_Channel__c slackChannel = SlackTestDataFactory.createSlackChannel();
+        insert slackApp;
+        insert slackChannel;
+
+        Test.setMock(HttpCalloutMock.class, new SlackHttpCalloutMock()); 
+        Test.startTest();
+            Slack_Modal__c slackModal = SlackTestDataFactory.createSlackModal();
+            insert slackModal;
+        Test.stopTest();
+    }
+
+    @isTest static void testSendSlackHome() {
+        Slack_App__c slackApp = SlackTestDataFactory.createSlackApp();
+        Slack_Channel__c slackChannel = SlackTestDataFactory.createSlackChannel();
+        insert slackApp;
+        insert slackChannel;
+
+        Test.setMock(HttpCalloutMock.class, new SlackHttpCalloutMock()); 
+        Test.startTest();
+            Slack_Home__c slackHome = SlackTestDataFactory.createSlackHome();
+            insert slackHome;
+        Test.stopTest();
+    }
+
    @isTest static void testSendSlackMessageEphemeral() {
 
     Slack_App__c slackApp = SlackTestDataFactory.createSlackApp();

@@ -6,7 +6,6 @@ public class SlackActions {
         sendHomeToSlack(slackHomeId);
     }
 
-
     public static String sendHomeToSlack(Id slackHomeId) {
         Slack_Home__c slackHome = [SELECT Home__c FROM Slack_Home__c WHERE Id = :slackHomeId];
 

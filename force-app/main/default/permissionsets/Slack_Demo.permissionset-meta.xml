@@ -54,7 +54,17 @@
     </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Slack_App__c.Access_Token__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Slack_App__c.App_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Slack_App__c.Authentication_URL__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -65,6 +75,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Slack_App__c.Client_Secret__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Slack_App__c.User_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

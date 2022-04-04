@@ -3,48 +3,47 @@ global class SlackParseRequest {
 
     @httpPost
     global static void parseSlackRequestHttp() {
-        // get payload parameter because I don't know what Slack is thinking anymore at this point, like wtf Slack, just post a simple json in a body.
-        // This is because slack sends a x-www-form-urlencoded package instead of a json package. I thought that package would be part of the body, but it's not, it's in the HTTP parameters
-        // So this isn't needed
-        	// String jsonString = EncodingUtil.urlDecode(RestContext.request.requestBody.toString(), 'UTF-8');
-        	// response = SlackResponseParser.parse(jsonString.substringAfter('='));
 
-        String json = RestContext.request.params.get('payload');
-        
-        
-        
-        // Try to parse JSON received from Slack, if possible to parse, send platform & slack response event.
+        String jsonInput = RestContext.request.params.get('payload');
+
         try {
-            timoverbrugghe.SlackButtonResponseParser response = new timoverbrugghe.SlackButtonResponseParser();
-            response = timoverbrugghe.SlackButtonResponseParser.parse(json);
+        // Parse JSON received from Slack
+            Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(jsonInput);
 
-            // Create a new Slack Response object
+            // Get button press info
+            List<Object> actions = (List<Object>)parsedJson.get('actions');
+            Map<String, Object> firstAction = (Map<String, Object>)actions[0];
+            
+            // Create a new Slack Response object & Platform Event
             timoverbrugghe__Slack_Response__c slackResponse = new timoverbrugghe__Slack_Response__c(
-                timoverbrugghe__Action_ID__c = response.actions[0].action_id,
-                timoverbrugghe__Response_URL__c = response.response_url,
-                timoverbrugghe__Value__c = response.actions[0].value,
-                timoverbrugghe__Trigger_ID__c = response.trigger_id
+                timoverbrugghe__Action_ID__c = (String) firstAction.get('action_id'),
+                timoverbrugghe__Value__c = (String) firstAction.get('value'),
+                timoverbrugghe__Trigger_ID__c = (String) parsedJson.get('trigger_id')
             );
 
-            // Create new platform event
             timoverbrugghe__Slack_Button_Clicked__e slackButtonClickedEvent = new timoverbrugghe__Slack_Button_Clicked__e(
-                timoverbrugghe__Action_ID__c = response.actions[0].action_id,
-                timoverbrugghe__Response_URL__c = response.response_url,
-                timoverbrugghe__Value__c = response.actions[0].value,
-                timoverbrugghe__Trigger_ID__c = response.trigger_id            
+                timoverbrugghe__Action_ID__c = (String) firstAction.get('action_id'),
+                timoverbrugghe__Value__c = (String) firstAction.get('value'),
+                timoverbrugghe__Trigger_ID__c = (String) parsedJson.get('trigger_id')          
             );
 
-            // If thread ID exists (because it doesn't if it's a reply on an ephemeral message) add it as well to the responses.
-            if (response.message.ts != null) {
-                slackResponse.timoverbrugghe__Thread_ID__c = response.message.ts;
-                slackButtonClickedEvent.timoverbrugghe__Thread_ID__c = response.message.ts;
+            // Try to add response URL (will only be there if action came from a message)
+            if(parsedJson.containsKey('response_url')) {
+                slackResponse.timoverbrugghe__Response_URL__c = (String) parsedJson.get('response_url');
+                slackButtonClickedEvent.timoverbrugghe__Response_URL__c = (String) parsedJson.get('response_url');
             }
 
-            // Call method to publish event & create SlackResponse record
+            // Try to add Thread ID (will only be there if action came from a message)
+            if(parsedJson.containsKey('message')) {
+                Map<String, Object> message = (Map<String, Object>)parsedJson.get('message');
+                slackResponse.timoverbrugghe__Thread_ID__c = (String) message.get('ts');
+                slackButtonClickedEvent.timoverbrugghe__Thread_ID__c = (String) message.get('ts');
+            }
+
+            // Insert slackResponse object and Platform Event
             insert slackResponse;
             Database.SaveResult sr = EventBus.publish(slackButtonClickedEvent);
-
-        // If unable to parse, create slack response event with INVALID - PARSE_ERROR value
+        
         } catch (Exception e) {
             // Create Invalid Response Slack Response object
             timoverbrugghe__Slack_Response__c slackResponse = new timoverbrugghe__Slack_Response__c(
@@ -54,8 +53,6 @@ global class SlackParseRequest {
             );
             insert slackResponse;
         }
-        
-
         
     }
     
@@ -79,23 +76,26 @@ global class SlackParseRequest {
         request.setBody('code=' + authCode + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&redirect_uri=' + siteUrl + '/services/apexrest/timoverbrugghe/SlackDemoApp/parseSlackAuthHttp');
         HttpResponse response = http.send(request);
 
-        // Parsing response for the access token and creating Slack Channel record in Salesforce
-        timoverbrugghe.SlackAuthResponseParser slackResponse = new timoverbrugghe.SlackAuthResponseParser();
-        slackResponse = SlackAuthResponseParser.parse(response.getBody());
+        // Parse JSON received from Slack
+        String jsonInput = response.getBody();
+        Map<String, Object> parsedJson = (Map<String, Object>) JSON.deserializeUntyped(jsonInput);
+
+        Map<String, Object> incomingwebhook = (Map<String, Object>)parsedJson.get('incoming_webhook');
+        Map<String, Object> authedUser = (Map<String, Object>)parsedJson.get('authed_user');
 
         // Creating new Slack Channel Record
         timoverbrugghe__Slack_Channel__c slackChannel = new timoverbrugghe__Slack_Channel__c(
-            timoverbrugghe__Endpoint_URL__c = slackResponse.incoming_webhook.url,
-            Name = slackResponse.incoming_webhook.channel,
-            timoverbrugghe__Access_Token__c = slackResponse.access_token,
-            timoverbrugghe__Channel_ID__c = slackResponse.incoming_webhook.channel_id,
-            timoverbrugghe__User_ID__c = slackResponse.authed_user.id
+            timoverbrugghe__Endpoint_URL__c = (String) incomingwebhook.get('url'),
+            Name = (String) incomingwebhook.get('channel'),
+            timoverbrugghe__Access_Token__c = (String) parsedJson.get('access_token'),
+            timoverbrugghe__Channel_ID__c = (String) incomingwebhook.get('channel_id'),
+            timoverbrugghe__User_ID__c = (String) authedUser.get('id')
         );
         upsert slackChannel timoverbrugghe__Endpoint_URL__c;
 
         // Updating User ID & Access Token in the Slack App Record
-        slackApp.timoverbrugghe__Access_Token__c = slackResponse.access_token;
-        slackApp.timoverbrugghe__User_ID__c = slackResponse.authed_user.id;
+        slackApp.timoverbrugghe__Access_Token__c = (String) parsedJson.get('access_token');
+        slackApp.timoverbrugghe__User_ID__c = (String) authedUser.get('id');
         upsert slackApp;
 
         // Redirect back to homescreen
@@ -104,7 +104,6 @@ global class SlackParseRequest {
         RestContext.response.statusCode = 301;
         RestContext.response.addHeader('Location', orgUrl + '/lightning/n/timoverbrugghe__Slack_Demo_Home');
         RestContext.response.addHeader('http-equiv','refresh');
-
 
     }
 

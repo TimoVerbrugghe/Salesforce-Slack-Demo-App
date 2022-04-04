@@ -38,4 +38,20 @@ public class SlackTestDataFactory {
         );
         return slackMessage;
     }
+
+    public static Slack_Modal__c createSlackModal() {
+        Slack_Modal__c slackModal = new Slack_Modal__c(
+            Modal__c = '',
+            Trigger_ID__c = 'test'
+        );
+        return slackModal;
+    }
+
+    public static Slack_Home__c createSlackHome() {
+        Slack_Home__c slackHome = new Slack_Home__c(
+            Home__c = ''
+        );
+        return slackHome;
+    }
+
 }

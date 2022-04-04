@@ -4,6 +4,7 @@ import setupAlreadyDone from '@salesforce/apex/SlackSetup.setupAlreadyDone';
 import getSlackApps from '@salesforce/apex/SlackSetup.getSlackApps';
 import getSlackChannels from '@salesforce/apex/SlackSetup.getSlackChannels';
 import generateSlackApp from '@salesforce/apex/SlackSetup.generateSlackApp';
+import sendTestMessages from '@salesforce/apex/SlackSetup.sendTestMessages';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import SLACKICON from '@salesforce/resourceUrl/SlackIcon';
 import getSalesforceUrl from '@salesforce/apex/GetSalesforceURL.getSalesforceURL';
@@ -48,6 +49,7 @@ export default class SlackSetup extends NavigationMixin(LightningElement) {
         if (data) {
             this.slackChannels = data;
             this.error = undefined;
+            console.log(data);
         } else if (error) {
             this.error = error;
             this.slackChannels = undefined;
@@ -64,7 +66,6 @@ export default class SlackSetup extends NavigationMixin(LightningElement) {
     wiredOrgUrl({error,data}) {
         if (data) {
             this.orgUrl = data;
-            this.testMessage = '{ "blocks": [ { "type": "section", "text": { "type": "mrkdwn", "text": "Hi :wave:! This is a test message coming from the Slack Demo App :slack:" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "This means that you have succesfully linked :slack: and your :salesforce: org! You are ready to build some amazing demos now!" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "Below is some information for your reference" } }, { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Date sent:*\n' + this.currentDate + '" }, { "type": "mrkdwn", "text": "*Org URL:*\n'+ this.orgUrl +'" } ] }, { "type": "section", "text": { "type": "mrkdwn", "text": "You can now also test out receiving responses from Slack by clicking on any of the buttons below :point_down:. When you click on the button below, a new tab will open with your :salesforce: org. This will also create a Platform event & Slack Response record." } }, { "type": "actions", "elements": [ { "type": "button", "url": "' + this.orgUrl + '/lightning/n/timoverbrugghe__Slack_Demo_Home", "text": { "type": "plain_text", "emoji": true, "text": ":salesforce: View Slack Demo App" }, "value": "GoToSlackDemoApp", "action_id": "GoToSlackDemoApp" } ] } ] }';
             this.error = undefined;
         } else if (error) {
             this.error = error;
@@ -205,9 +206,6 @@ export default class SlackSetup extends NavigationMixin(LightningElement) {
                     message: 'Your Slack App was created succesfully, you can now install it!',
                     variant: SUCCESS_VARIANT
                 }));
-                
-                console.log(this.slackApp);
-                console.log(this.slackApp.timoverbrugghe_Authentication_URL__c);
                 this.isLoading = false;
                 this.appCreated = true;
                 this.createSlackAppDisabled = true;
@@ -228,27 +226,33 @@ export default class SlackSetup extends NavigationMixin(LightningElement) {
     // Page 3 - Add app to channel Slack
 
     handleAddToSlackClick() {
+        // Open adding to Slack in the same window as the setup screen
         window.open(this.slackApp.timoverbrugghe__Authentication_URL__c, "_self")
-
-        /*
-        const goToSlackAdd = {
-            type: 'standard__webPage',
-            attributes: {
-                url: this.slackApp.timoverbrugghe__Authentication_URL__c
-            }
-        };
-        this[NavigationMixin.Navigate](goToSlackAdd);
-        */
     }
 
     // Page 4 - Finish (or showcase if app & channel already created)
 
-    handleMessageSubmitSuccess() {
-        this.dispatchEvent(ShowToastEvent({
-            title: SUCCESS_TITLE,
-            message: SUCCESS_MESSAGE,
-            variant: SUCCESS_VARIANT
-        }));
+    handleTestMessageSend() {
+        this.isLoading = true;
+        setTimeout(() => {
+            sendTestMessages()
+            .then((result) => {
+                this.dispatchEvent(ShowToastEvent({
+                    title: SUCCESS_TITLE,
+                    message: SUCCESS_MESSAGE,
+                    variant: SUCCESS_VARIANT
+                }));
+                this.isLoading = false;
+            })
+            .catch((error) => {
+                this.error = error;
+                this.dispatchEvent(ShowToastEvent({
+                    title: "Couldn't send test message",
+                    message: "Couldn't send a test message. An error was generated.",
+                    variant: ERROR_VARIANT
+                }));
+            });
+        }, 0);
     }
     
     activeSectionMessage = '';

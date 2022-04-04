@@ -1,4 +1,4 @@
-public with sharing class SlackSetup {
+public class SlackSetup {
 
     @AuraEnabled
     public static Slack_App__c generateSlackApp(String token, String siteName, String appName){
@@ -53,6 +53,30 @@ public with sharing class SlackSetup {
     }
 
     @AuraEnabled
+    public static String sendTestMessages(){
+        try {
+            String orgUrl = URL.getSalesforceBaseUrl().toExternalForm();
+            String currentDate = DateTime.now().format('yyyy-MM-dd');
+            String testMessage = '{ "blocks": [ { "type": "section", "text": { "type": "mrkdwn", "text": "Hi :wave:! This is a test message coming from the Slack Demo App :slack:" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "This means that you have succesfully linked :slack: and your :salesforce: org! You are ready to build some amazing demos now!" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "Below is some information for your reference" } }, { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Date sent:*\n' + currentDate + '" }, { "type": "mrkdwn", "text": "*Org URL:*\n'+ orgUrl +'" } ] }, { "type": "section", "text": { "type": "mrkdwn", "text": "You can now also test out receiving responses from Slack by clicking on any of the buttons below :point_down:. When you click on the button below, a new tab will open with your :salesforce: org. This will also create a Platform event & Slack Response record." } }, { "type": "actions", "elements": [ { "type": "button", "url": "' + orgUrl + '/lightning/n/timoverbrugghe__Slack_Demo_Home", "text": { "type": "plain_text", "emoji": true, "text": ":salesforce: View Slack Demo App" }, "value": "GoToSlackDemoApp", "action_id": "GoToSlackDemoApp" } ] } ] }';
+            
+            List<Slack_Message__c> messages = new List<Slack_Message__c>();
+            
+            for (Slack_Channel__c channel : getSlackChannels()) {
+                Slack_Message__c message = new Slack_Message__c(
+                    Message__c = testMessage,
+                    Slack_Channel__c = channel.Id
+                );
+                messages.add(message);
+            }
+
+            insert messages;
+            return 'ok';
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    @AuraEnabled
     public static Boolean setupAlreadyDone(){
         try {
             List<Slack_Channel__c> slackchannels = [SELECT Id FROM Slack_Channel__c];
@@ -75,7 +99,7 @@ public with sharing class SlackSetup {
         }
     }
 
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<Slack_Channel__c> getSlackChannels() {
         try {
             return [SELECT Id, Name FROM Slack_Channel__c];
