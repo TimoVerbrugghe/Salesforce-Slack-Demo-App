@@ -91,11 +91,23 @@ global class SlackParseRequest {
             timoverbrugghe__Channel_ID__c = (String) incomingwebhook.get('channel_id'),
             timoverbrugghe__User_ID__c = (String) authedUser.get('id')
         );
-        upsert slackChannel timoverbrugghe__Endpoint_URL__c;
 
         // Updating User ID & Access Token in the Slack App Record
         slackApp.timoverbrugghe__Access_Token__c = (String) parsedJson.get('access_token');
         slackApp.timoverbrugghe__User_ID__c = (String) authedUser.get('id');
+
+        // Invite bot to the channel so that ephemeral messages work
+        Http http2 = new Http();
+        HttpRequest request2 = new HttpRequest();
+        request2.setEndPoint('https://slack.com/api/conversations.join');
+        request2.setMethod('POST');
+        request2.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request2.setHeader('Authorization', 'Bearer ' + slackChannel.timoverbrugghe__Access_Token__c);
+        request2.setBody('channel=' + slackChannel.timoverbrugghe__Channel_ID__c);
+        HttpResponse response2 = http2.send(request2);
+
+        // Committing changes to the database
+        upsert slackChannel timoverbrugghe__Endpoint_URL__c;
         upsert slackApp;
 
         // Redirect back to homescreen
@@ -104,7 +116,6 @@ global class SlackParseRequest {
         RestContext.response.statusCode = 301;
         RestContext.response.addHeader('Location', orgUrl + '/lightning/n/timoverbrugghe__Slack_Demo_Home');
         RestContext.response.addHeader('http-equiv','refresh');
-
     }
 
 }

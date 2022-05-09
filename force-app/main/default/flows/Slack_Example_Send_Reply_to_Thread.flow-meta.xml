@@ -95,7 +95,7 @@ A flow that triggers when somebody clicks on a button in Slack (which launches a
         <object>Slack_Button_Clicked__e</object>
         <triggerType>PlatformEvent</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <textTemplates>
         <name>SlackMessage</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>

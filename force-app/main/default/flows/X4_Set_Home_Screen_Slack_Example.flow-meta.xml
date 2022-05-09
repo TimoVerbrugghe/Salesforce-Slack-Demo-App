@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Salesforce_URL</name>
+        <label>Get Salesforce URL</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <actionName>GetSalesforceURL</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Set_Slack_App_Home_Screen</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <description>This flow showcases how you can set a home screen for your app, which you can see when you go to the Apps section and click on your Slack App. You can run this flow manually by opening it and clicking the &quot;Run&quot; button.</description>
+    <interviewLabel>4 - Set Home Screen {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>4 - Set Home Screen (Slack Example)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Set_Slack_App_Home_Screen</name>
+        <label>Set Slack App Home Screen</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <inputAssignments>
+            <field>Home__c</field>
+            <value>
+                <elementReference>SlackDemoAppHomeScreen</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Home__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Salesforce_URL</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>SlackDemoAppHomeScreen</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{
+	&quot;type&quot;: &quot;home&quot;,
+	&quot;blocks&quot;: [
+		{
+			&quot;type&quot;: &quot;header&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;plain_text&quot;,
+				&quot;text&quot;: &quot;Welcome to the Slack Demo App - Home Page&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;This home page is created because you ran the &apos;Update Slack Home&apos; flow which is one of the Demo flows in your :salesforce: org.&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;actions&quot;,
+			&quot;elements&quot;: [
+				{
+					&quot;type&quot;: &quot;button&quot;,
+					&quot;text&quot;: {
+						&quot;type&quot;: &quot;plain_text&quot;,
+						&quot;text&quot;: &quot;:salesforce: Go to Salesforce&quot;,
+						&quot;emoji&quot;: true
+					},
+					&quot;value&quot;: &quot;SalesforceURLClicked&quot;,
+					&quot;url&quot;: &quot;{!Get_Salesforce_URL}/lightning/n/timoverbrugghe__Slack_Demo_Home&quot;
+				},
+				{
+					&quot;type&quot;: &quot;button&quot;,
+					&quot;text&quot;: {
+						&quot;type&quot;: &quot;plain_text&quot;,
+						&quot;text&quot;: &quot;:slack: Open a popup window (modal)&quot;,
+						&quot;emoji&quot;: true
+					},
+					&quot;value&quot;: &quot;SlackDemoAppHomeOpenModal&quot;,
+					&quot;action_id&quot;: &quot;SlackDemoAppHomeOpenModal&quot;
+				}
+			]
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;*What to do now?*&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;divider&quot;
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;*Solutions Central Post*\nCheck out the post on Solutions Central to see some demo use cases&quot;
+			},
+			&quot;accessory&quot;: {
+				&quot;type&quot;: &quot;button&quot;,
+				&quot;text&quot;: {
+					&quot;type&quot;: &quot;plain_text&quot;,
+					&quot;text&quot;: &quot;Check out Post&quot;,
+					&quot;emoji&quot;: true
+				},
+				&quot;value&quot;: &quot;GoToSolutionsCentralPost&quot;,
+				&quot;url&quot;: &quot;https://solutionscentral.io/posts/b5ef9cc0-a695-11ec-81c3-fb7b35f227e0/slack-demo-app-bringing-slack-amp-salesforce-together-in-any-demo/&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;divider&quot;
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;*Join Slack Pathfinders*\nJoin the #slack-pathfinders channel to discuss innovative ways the Slack + Salesforce vision can be woven into our demos and customer conversations.&quot;
+			},
+			&quot;accessory&quot;: {
+				&quot;type&quot;: &quot;button&quot;,
+				&quot;text&quot;: {
+					&quot;type&quot;: &quot;plain_text&quot;,
+					&quot;text&quot;: &quot;:slack: Join Channel&quot;,
+					&quot;emoji&quot;: true
+				},
+				&quot;value&quot;: &quot;OpenSlackPathFinders&quot;,
+				&quot;url&quot;: &quot;https://salesforce-internal.slack.com/archives/C02F240ECTC&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;divider&quot;
+		}
+	]
+}</text>
+    </textTemplates>
+</Flow>

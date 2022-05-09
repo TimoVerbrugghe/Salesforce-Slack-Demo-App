@@ -5,8 +5,8 @@
             "default": true,
             "package": "SlackDemoApp",
             "versionName": "Initial Release",
-            "versionNumber": "1.5.0.0",
-            "ancestorVersion": "1.4.0"
+            "versionNumber": "2.1.0.0",
+            "ancestorVersion": "2.0.0.0"
         }
     ],
     "name": "SlackIntegration",
@@ -21,6 +21,8 @@
         "SlackDemoApp@1.2.0-0": "04t7Q000000kyZgQAI",
         "SlackDemoApp@1.3.0-0": "04t7Q000000kyZqQAI",
         "SlackDemoApp@1.4.0-0": "04t7Q000000kyZvQAI",
-        "SlackDemoApp@1.5.0-0": "04t7Q000000kya5QAA"
+        "SlackDemoApp@1.5.0-0": "04t7Q000000kya5QAA",
+        "SlackDemoApp@2.0.0-0": "05i7Q000000Caj6QAC",
+        "SlackDemoApp@2.1.0-0": "05i7Q000000CajGQAS"
     }
 }

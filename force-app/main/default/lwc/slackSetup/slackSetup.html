@@ -56,7 +56,7 @@
                 </p>
                 <lightning-input class="slds-var-p-around_medium" type="text" label="Your app name" placeholder="This name will be visible in Slack..." onchange={handleAppNameChange}></lightning-input>
                 <p>
-                    Secondly, we need your App Generation token. This is a token that you can get by going to api.slack.com/apps.
+                    Secondly, we need your App Generation token. This is a token that you can get by going to https://api.slack.com/apps. Then you click on the button "Generate Token" and click on the "Copy" button under "Access Token".
                 </p>
                 <lightning-input class="slds-var-p-around_medium" type="text" label="Your app token" onchange={handleTokenChange}></lightning-input>
             
@@ -64,6 +64,8 @@
                     <div class="slds-align_absolute-center">
                         <lightning-button variant="neutral" disabled={disableButton} label="Create Slack App" icon-name="utility:builder" onclick={handleCreatingApp} class="slds-align_absolute-center"></lightning-button>
                     </div>
+                    
+                    <br>
 
                     <template if:true={appCreated}>
                         Now that your app is created, it's time to make the connection to your Salesforce Org. 🚀 <br>
@@ -173,14 +175,6 @@
                                 Go to the <a href={slackBlockKitUrl} target="_blank">Slack Block Kit Builder</a>
                             </li>
                         </ul>
-                    </lightning-accordion-section>
-
-                    <lightning-accordion-section name="Enable hidden messages" label="Enable hidden messages (Only visible to you)">
-                        <div class="slds-var-p-around_medium">
-                            If you want to enable messages that are only meant for a specific user, hidden from others ("Only visible to you"), then you need to invite your app to the channel that you want to send a hidden message to.<br>
-                            You can do this by going to your channel and typing "/invite YOURAPPNAMEHERE".<br>
-                            Afterwards, you can enable the checkbox "Hidden Message?" when creating a Slack Message record.
-                        </div>
                     </lightning-accordion-section>
 
                     <lightning-accordion-section name="Add an additional slack channel" label="Add an additional slack channel ">

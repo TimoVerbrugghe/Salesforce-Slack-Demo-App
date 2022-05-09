@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>Check_Action_ID</name>
+        <label>Check Action_ID</label>
+        <locationX>182</locationX>
+        <locationY>194</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_SlackDemoAppHomeOpenModal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.timoverbrugghe__Action_ID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>SlackDemoAppHomeOpenModal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Slack_Modal</targetReference>
+            </connector>
+            <label>If &quot;SlackDemoAppHomeOpenModal&quot;</label>
+        </rules>
+    </decisions>
+    <description>(Works together with 4 - Set Home Screen (Slack Example))
+This flow gets launched when you click the &quot;Open a popup window (modal)&quot; button is pressed on your App Home Screen.</description>
+    <interviewLabel>5 - Open a popup window (Slack Modal {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>5 - Open a popup window (Slack Example)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Send_Slack_Modal</name>
+        <label>Send Slack Modal</label>
+        <locationX>50</locationX>
+        <locationY>314</locationY>
+        <inputAssignments>
+            <field>Modal__c</field>
+            <value>
+                <elementReference>SlackModal</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Trigger_ID__c</field>
+            <value>
+                <elementReference>$Record.Trigger_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Slack_Modal__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Action_ID</targetReference>
+        </connector>
+        <object>Slack_Button_Clicked__e</object>
+        <triggerType>PlatformEvent</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>SlackModal</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{
+	&quot;type&quot;: &quot;modal&quot;,
+	&quot;title&quot;: {
+		&quot;type&quot;: &quot;plain_text&quot;,
+		&quot;text&quot;: &quot;My App&quot;,
+		&quot;emoji&quot;: true
+	},
+	&quot;submit&quot;: {
+		&quot;type&quot;: &quot;plain_text&quot;,
+		&quot;text&quot;: &quot;Submit&quot;,
+		&quot;emoji&quot;: true
+	},
+	&quot;close&quot;: {
+		&quot;type&quot;: &quot;plain_text&quot;,
+		&quot;text&quot;: &quot;Cancel&quot;,
+		&quot;emoji&quot;: true
+	},
+	&quot;blocks&quot;: [
+		{
+			&quot;type&quot;: &quot;header&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;plain_text&quot;,
+				&quot;text&quot;: &quot;You just opened a Modal!&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;A modal is a popup window in Slack which can be used for f.e. confirming an action or asking for additional input.&quot;
+			}
+		},
+		{
+			&quot;type&quot;: &quot;section&quot;,
+			&quot;text&quot;: {
+				&quot;type&quot;: &quot;mrkdwn&quot;,
+				&quot;text&quot;: &quot;For now, you can just close this modal by clicking on the Submit or Cancel button.&quot;
+			}
+		}
+	]
+}</text>
+    </textTemplates>
+</Flow>
