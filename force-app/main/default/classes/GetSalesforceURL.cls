@@ -1,6 +1,6 @@
-public class GetSalesforceURL {
+global class GetSalesforceURL {
     @InvocableMethod(label='Get Salesforce URL' description='Gives you the URL to your salesforce org, in the format https://xxxx.lightning.force.com, so you can use it to build actions in Slack Messages')
-    public static List<String> getSalesforceURLFlowAction() {
+    global static List<String> getSalesforceURLFlowAction() {
         List<String> results = new List<String>();
         String SalesforceURL = URL.getSalesforceBaseUrl().toExternalForm();
         results.add(SalesforceURL);
@@ -8,7 +8,7 @@ public class GetSalesforceURL {
     }
 
     @AuraEnabled(cacheable=true)
-    public static String getSalesforceURL() {
+    global static String getSalesforceURL() {
         return URL.getSalesforceBaseUrl().toExternalForm();
     }
 }

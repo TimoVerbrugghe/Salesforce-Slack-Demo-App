@@ -1,6 +1,20 @@
 @isTest
 public class SlackActions_Test {
 
+    @isTest static void testCreateSlackChannel() {
+        Slack_App__c slackApp = SlackTestDataFactory.createSlackApp();
+        Slack_Channel__c slackChannel = SlackTestDataFactory.createSlackChannel();
+        insert slackApp;
+        insert slackChannel;
+
+        String slackChannelName = 'Test Channel Name';
+
+        Test.setMock(HttpCalloutMock.class, new SlackHttpCalloutMockCreateChannel()); 
+        Test.startTest();
+            SlackActions.createSlackChannelAsync(slackChannelName);
+        Test.stopTest();
+    }
+
     @isTest static void testSendSlackModal() {
         Slack_App__c slackApp = SlackTestDataFactory.createSlackApp();
         Slack_Channel__c slackChannel = SlackTestDataFactory.createSlackChannel();
@@ -72,6 +86,18 @@ public class SlackActions_Test {
             // Create a fake response
             HttpResponse response = new HttpResponse();
             response.setBody('ok');
+            response.setStatusCode(200);
+            return response; 
+        }
+    }
+
+    public class SlackHttpCalloutMockCreateChannel implements HttpCalloutMock {
+        // Implement this interface method
+        public HTTPResponse respond(HTTPRequest request) {
+            // Create a fake response
+            HttpResponse response = new HttpResponse();
+            response.setHeader('Content-Type', 'application/json');
+            response.setBody('{ "channel": {"name" : "testName", "id" : "testId", "creator" : "creatorId"}, "ok" : true}');
             response.setStatusCode(200);
             return response; 
         }

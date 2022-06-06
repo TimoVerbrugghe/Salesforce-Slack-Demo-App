@@ -13,7 +13,9 @@ public class SlackTestDataFactory {
             Site_URL__c = 'testUrl',
             App_ID__c = 'testAppId',
             Client_ID__c = 'clientId',
-            Client_Secret__c = 'clientSecret'
+            Client_Secret__c = 'clientSecret',
+            Access_Token__c = 'accessToken',
+            User_ID__c = 'userId'
         );
         
         return slackApp;
