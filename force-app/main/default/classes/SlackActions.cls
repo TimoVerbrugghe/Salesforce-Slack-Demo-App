@@ -36,7 +36,7 @@ public class SlackActions {
             );
 
             // Invite user into the channel
-            inviteUserToChannel(slackChannel.timoverbrugghe__Channel_ID__c);
+            inviteUserToChannelWithSlackChannelId(slackChannel.timoverbrugghe__Channel_ID__c);
 
             insert slackChannel;
 
@@ -51,7 +51,9 @@ public class SlackActions {
         }
     }
 
-    public static String inviteUserToChannel(String slackChannelId) {
+    // Inviting user to a channel
+
+    public static String inviteUserToChannelWithSlackChannelId(String slackChannelId) {
         // Select the first (and presumably only SlackApp available)
         timoverbrugghe__Slack_App__c slackApp = [SELECT timoverbrugghe__Access_Token__c, timoverbrugghe__User_ID__c FROM timoverbrugghe__Slack_App__c LIMIT 1];
 
@@ -76,6 +78,11 @@ public class SlackActions {
         catch (CalloutException e) {
             return e.getMessage();
         }
+    }
+
+    public static String inviteUserToChannelWithSalesforceChannelId(timoverbrugghe__Slack_Channel__c slackChannel) {
+        String channelId = inviteUserToChannelWithSlackChannelId(slackChannel.timoverbrugghe__Channel_ID__c);
+        return channelId;
     }
 
     // Updating Home
@@ -161,7 +168,6 @@ public class SlackActions {
         Slack_App__c slackApp = [SELECT Access_Token__c, User_ID__c FROM Slack_App__c LIMIT 1];
         Slack_Message__c slackMessage = [SELECT Message__c, Slack_Channel__c, Only_visible_to_you__c, Thread_ID__c FROM Slack_Message__c WHERE Id = :slackMessageId];
         Slack_Channel__c slackChannel = [SELECT Channel_ID__c FROM Slack_Channel__c WHERE Id = :slackMessage.Slack_Channel__c];
-        // String endpoint = slackChannel.Endpoint_URL__c;
 
         String endpoint = 'https://slack.com/api/chat.postmessage';
         String newMessage = slackMessage.Message__c;
