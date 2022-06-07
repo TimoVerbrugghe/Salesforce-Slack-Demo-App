@@ -181,7 +181,7 @@ public class SlackActions {
             newMessage = message.substring(0,1) + addToMessage + message.substring(1);
         } else {
             endpoint = 'https://slack.com/api/chat.postEphemeral';
-            String addToMessage = '"user": "' + slackChannel.User_ID__c + '", "channel" : "' + slackChannel.Channel_ID__c + '",';
+            String addToMessage = '"user": "' + slackApp.User_ID__c + '", "channel" : "' + slackChannel.Channel_ID__c + '",';
             newMessage = message.substring(0,1) + addToMessage + message.substring(1);
         }
 

@@ -4,9 +4,9 @@
             "path": "force-app",
             "default": true,
             "package": "SlackDemoApp",
-            "versionName": "Version 2.3.0",
-            "versionNumber": "2.3.0.0",
-            "ancestorVersion": "2.1.0.0"
+            "versionName": "Version 2.4.0",
+            "versionNumber": "2.4.0.0",
+            "ancestorVersion": "2.3.0.0"
         }
     ],
     "name": "SlackIntegration",
@@ -17,6 +17,7 @@
         "SlackDemoApp": "0Ho7Q000000CaW2SAK",
         "SlackDemoApp@2.1.0-0": "04t7Q000000l1guQAA",
         "SlackDemoApp@2.2.0-0": "04t7Q000000lB1oQAE",
-        "SlackDemoApp@2.3.0-0": "04t7Q000000lB1tQAE"
+        "SlackDemoApp@2.3.0-0": "04t7Q000000lB1tQAE",
+        "SlackDemoApp@2.4.0-0": "04t7Q000000lCKMQA2"
     }
 }
