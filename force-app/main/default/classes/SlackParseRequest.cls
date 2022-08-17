@@ -21,7 +21,6 @@ global class SlackParseRequest {
                 Action_ID__c = (String) firstAction.get('action_id'),
                 Value__c = (String) firstAction.get('value'),
                 Trigger_ID__c = (String) parsedJson.get('trigger_id'),
-                Channel_ID__c = (String) container.get('channel_id'),
                 User_ID__c = (String) user.get('id')
             );
 
@@ -29,7 +28,6 @@ global class SlackParseRequest {
                 Action_ID__c = (String) firstAction.get('action_id'),
                 Value__c = (String) firstAction.get('value'),
                 Trigger_ID__c = (String) parsedJson.get('trigger_id'),
-                Channel_ID__c = (String) container.get('channel_id'),
                 User_ID__c = (String) user.get('id')          
             );
 
@@ -46,11 +44,11 @@ global class SlackParseRequest {
                 slackButtonClickedEvent.Thread_ID__c = (String) message.get('ts');
             }
 
-            // Try to add channel ID (will only be there if action came from a message)
-            if(parsedJson.containsKey('message')) {
-                Map<String, Object> message = (Map<String, Object>)parsedJson.get('message');
-                slackResponse.Thread_ID__c = (String) message.get('ts');
-                slackButtonClickedEvent.Thread_ID__c = (String) message.get('ts');
+            // Try to add channel ID (will only be there if action came from a message in a channel, not on the home page)
+            if(parsedJson.containsKey('channel')) {
+                Map<String, Object> channel = (Map<String, Object>)parsedJson.get('channel');
+                slackResponse.Channel_ID_c = (String) channel.get('id');
+                slackButtonClickedEvent.Channel_ID__c = (String) channel.get('id');
             }
 
             // Insert slackResponse object and Platform Event
