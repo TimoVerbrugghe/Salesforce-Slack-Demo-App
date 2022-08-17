@@ -12,19 +12,25 @@ global class SlackParseRequest {
 
             // Get button press info
             List<Object> actions = (List<Object>)parsedJson.get('actions');
+            Map<String, Object> container = (Map<String, Object>)parsedJson.container;
+            Map<String, Object> user = (Map<String, Object>)parsedJson.user;
             Map<String, Object> firstAction = (Map<String, Object>)actions[0];
             
             // Create a new Slack Response object & Platform Event
             Slack_Response__c slackResponse = new Slack_Response__c(
                 Action_ID__c = (String) firstAction.get('action_id'),
                 Value__c = (String) firstAction.get('value'),
-                Trigger_ID__c = (String) parsedJson.get('trigger_id')
+                Trigger_ID__c = (String) parsedJson.get('trigger_id'),
+                Channel_ID__c = (String) container.get('channel_id'),
+                User_ID__c = (String) user.get('id')
             );
 
             Slack_Button_Clicked__e slackButtonClickedEvent = new Slack_Button_Clicked__e(
                 Action_ID__c = (String) firstAction.get('action_id'),
                 Value__c = (String) firstAction.get('value'),
-                Trigger_ID__c = (String) parsedJson.get('trigger_id')          
+                Trigger_ID__c = (String) parsedJson.get('trigger_id'),
+                Channel_ID__c = (String) container.get('channel_id'),
+                User_ID__c = (String) user.get('id')          
             );
 
             // Try to add response URL (will only be there if action came from a message)
@@ -34,6 +40,13 @@ global class SlackParseRequest {
             }
 
             // Try to add Thread ID (will only be there if action came from a message)
+            if(parsedJson.containsKey('message')) {
+                Map<String, Object> message = (Map<String, Object>)parsedJson.get('message');
+                slackResponse.Thread_ID__c = (String) message.get('ts');
+                slackButtonClickedEvent.Thread_ID__c = (String) message.get('ts');
+            }
+
+            // Try to add channel ID (will only be there if action came from a message)
             if(parsedJson.containsKey('message')) {
                 Map<String, Object> message = (Map<String, Object>)parsedJson.get('message');
                 slackResponse.Thread_ID__c = (String) message.get('ts');
@@ -73,7 +86,7 @@ global class SlackParseRequest {
         request.setEndPoint('https://slack.com/api/oauth.v2.access');
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.setBody('code=' + authCode + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&redirect_uri=' + siteUrl + '/services/apexrest/timoverbrugghe/SlackDemoApp/parseSlackAuthHttp');
+        request.setBody('code=' + authCode + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&redirect_uri=' + siteUrl + '/services/apexrest/SlackDemoApp/parseSlackAuthHttp');
         HttpResponse response = http.send(request);
 
         // Parse JSON received from Slack

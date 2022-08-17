@@ -5,8 +5,8 @@ public class SlackSetup {
         try {
             // Getting Site URL
             String siteUrl = getSiteUrl(siteName);           
-            String redirectUrl = siteUrl + '/services/apexrest/timoverbrugghe/SlackDemoApp/parseSlackAuthHttp';
-            String requestUrl = siteUrl + '/services/apexrest/timoverbrugghe/SlackDemoApp/parseSlackRequestHttp';
+            String redirectUrl = siteUrl + '/services/apexrest/SlackDemoApp/parseSlackAuthHttp';
+            String requestUrl = siteUrl + '/services/apexrest/SlackDemoApp/parseSlackRequestHttp';
             String botFeatures = '"chat:write", "incoming-webhook", "channels:join", "channels:manage", "users:read.email", "users:read"';
 
             // Generating manifest
@@ -64,7 +64,7 @@ public class SlackSetup {
         try {
             String orgUrl = URL.getSalesforceBaseUrl().toExternalForm();
             String currentDate = DateTime.now().format('yyyy-MM-dd');
-            String testMessage = '{ "blocks": [ { "type": "section", "text": { "type": "mrkdwn", "text": "Hi :wave:! This is a test message coming from the Slack Demo App :slack:" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "This means that you have succesfully linked :slack: and your :salesforce: org! You are ready to build some amazing demos now!" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "Below is some information for your reference" } }, { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Date sent:*\n' + currentDate + '" }, { "type": "mrkdwn", "text": "*Org URL:*\n'+ orgUrl +'" } ] }, { "type": "section", "text": { "type": "mrkdwn", "text": "You can now also test out receiving responses from Slack by clicking on any of the buttons below :point_down:. When you click on the button below, a new tab will open with your :salesforce: org. This will also create a Platform event & Slack Response record." } }, { "type": "actions", "elements": [ { "type": "button", "url": "' + orgUrl + '/lightning/n/Slack_Demo_Home", "text": { "type": "plain_text", "emoji": true, "text": ":salesforce: View Slack Demo App" }, "value": "GoToSlackDemoApp", "action_id": "GoToSlackDemoApp" } ] } ] }';
+            String testMessage = '{ "blocks": [ { "type": "section", "text": { "type": "mrkdwn", "text": "Hi :wave:! This is a test message coming from the Slack Demo App :slack:" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "This means that you have succesfully linked :slack: and your :salesforce: org! You are ready to build some amazing demos now!" } }, { "type": "section", "text": { "type": "mrkdwn", "text": "Below is some information for your reference" } }, { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Date sent:*\n' + currentDate + '" }, { "type": "mrkdwn", "text": "*Org URL:*\n'+ orgUrl +'" } ] }, { "type": "section", "text": { "type": "mrkdwn", "text": "You can now also test out receiving responses from Slack by clicking on any of the buttons below :point_down:. When you click on the button below, a new tab will open with your :salesforce: org. This will also create a Platform event & Slack Response record." } }, { "type": "actions", "elements": [ { "type": "button", "url": "' + orgUrl + '", "text": { "type": "plain_text", "emoji": true, "text": ":salesforce: View Slack Demo App" }, "value": "GoToSlackDemoApp", "action_id": "GoToSlackDemoApp" } ] } ] }';
             
             List<Slack_Message__c> messages = new List<Slack_Message__c>();
             
