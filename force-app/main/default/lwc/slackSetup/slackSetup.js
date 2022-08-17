@@ -227,7 +227,7 @@ export default class SlackSetup extends NavigationMixin(LightningElement) {
 
     handleAddToSlackClick() {
         // Open adding to Slack in the same window as the setup screen
-        window.open(this.slackApp.timoverbrugghe__Authentication_URL__c, "_self")
+        window.open(this.slackApp.Authentication_URL__c, "_self")
     }
 
     // Page 4 - Finish (or showcase if app & channel already created)

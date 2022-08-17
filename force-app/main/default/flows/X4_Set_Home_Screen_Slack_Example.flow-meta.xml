@@ -90,7 +90,7 @@
 						&quot;emoji&quot;: true
 					},
 					&quot;value&quot;: &quot;SalesforceURLClicked&quot;,
-					&quot;url&quot;: &quot;{!Get_Salesforce_URL}/lightning/n/timoverbrugghe__Slack_Demo_Home&quot;
+					&quot;url&quot;: &quot;{!Get_Salesforce_URL}/lightning/n/Slack_Demo_Home&quot;
 				},
 				{
 					&quot;type&quot;: &quot;button&quot;,

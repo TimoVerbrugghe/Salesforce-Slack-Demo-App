@@ -38,7 +38,7 @@ export default class AddNewChannel extends NavigationMixin(LightningElement) {
         const goToSlackAdd = {
             type: 'standard__webPage',
             attributes: {
-                url: this.slackApp.timoverbrugghe__Authentication_URL__c
+                url: this.slackApp.Authentication_URL__c
             }
         };
         this[NavigationMixin.Navigate](goToSlackAdd);
