@@ -15,29 +15,29 @@ global class SlackParseRequest {
             Map<String, Object> firstAction = (Map<String, Object>)actions[0];
             
             // Create a new Slack Response object & Platform Event
-            timoverbrugghe__Slack_Response__c slackResponse = new timoverbrugghe__Slack_Response__c(
-                timoverbrugghe__Action_ID__c = (String) firstAction.get('action_id'),
-                timoverbrugghe__Value__c = (String) firstAction.get('value'),
-                timoverbrugghe__Trigger_ID__c = (String) parsedJson.get('trigger_id')
+            Slack_Response__c slackResponse = new Slack_Response__c(
+                Action_ID__c = (String) firstAction.get('action_id'),
+                Value__c = (String) firstAction.get('value'),
+                Trigger_ID__c = (String) parsedJson.get('trigger_id')
             );
 
-            timoverbrugghe__Slack_Button_Clicked__e slackButtonClickedEvent = new timoverbrugghe__Slack_Button_Clicked__e(
-                timoverbrugghe__Action_ID__c = (String) firstAction.get('action_id'),
-                timoverbrugghe__Value__c = (String) firstAction.get('value'),
-                timoverbrugghe__Trigger_ID__c = (String) parsedJson.get('trigger_id')          
+            Slack_Button_Clicked__e slackButtonClickedEvent = new Slack_Button_Clicked__e(
+                Action_ID__c = (String) firstAction.get('action_id'),
+                Value__c = (String) firstAction.get('value'),
+                Trigger_ID__c = (String) parsedJson.get('trigger_id')          
             );
 
             // Try to add response URL (will only be there if action came from a message)
             if(parsedJson.containsKey('response_url')) {
-                slackResponse.timoverbrugghe__Response_URL__c = (String) parsedJson.get('response_url');
-                slackButtonClickedEvent.timoverbrugghe__Response_URL__c = (String) parsedJson.get('response_url');
+                slackResponse.Response_URL__c = (String) parsedJson.get('response_url');
+                slackButtonClickedEvent.Response_URL__c = (String) parsedJson.get('response_url');
             }
 
             // Try to add Thread ID (will only be there if action came from a message)
             if(parsedJson.containsKey('message')) {
                 Map<String, Object> message = (Map<String, Object>)parsedJson.get('message');
-                slackResponse.timoverbrugghe__Thread_ID__c = (String) message.get('ts');
-                slackButtonClickedEvent.timoverbrugghe__Thread_ID__c = (String) message.get('ts');
+                slackResponse.Thread_ID__c = (String) message.get('ts');
+                slackButtonClickedEvent.Thread_ID__c = (String) message.get('ts');
             }
 
             // Insert slackResponse object and Platform Event
@@ -46,10 +46,10 @@ global class SlackParseRequest {
         
         } catch (Exception e) {
             // Create Invalid Response Slack Response object
-            timoverbrugghe__Slack_Response__c slackResponse = new timoverbrugghe__Slack_Response__c(
-                timoverbrugghe__Action_ID__c = 'INVALID JSON - PARSE ERROR',
-                timoverbrugghe__Response_URL__c = '',
-                timoverbrugghe__Value__c = 'Could not figure out what Slack sent me (Could not parse the JSON)'
+            Slack_Response__c slackResponse = new Slack_Response__c(
+                Action_ID__c = 'INVALID JSON - PARSE ERROR',
+                Response_URL__c = '',
+                Value__c = 'Could not figure out what Slack sent me (Could not parse the JSON)'
             );
             insert slackResponse;
         }
@@ -62,11 +62,11 @@ global class SlackParseRequest {
     global static void parseSlackAuthHttp() {
         RestRequest req = RestContext.request;
         String authCode = req.params.get('code');
-        timoverbrugghe__Slack_App__c slackApp = [SELECT timoverbrugghe__Client_ID__c, timoverbrugghe__Client_Secret__c, timoverbrugghe__Site_Url__c FROM timoverbrugghe__Slack_App__c LIMIT 1];
+        Slack_App__c slackApp = [SELECT Client_ID__c, Client_Secret__c, Site_Url__c FROM Slack_App__c LIMIT 1];
 
-        String clientId = slackApp.timoverbrugghe__Client_ID__c;
-        String clientSecret = slackApp.timoverbrugghe__Client_Secret__c;
-        String siteUrl = slackApp.timoverbrugghe__Site_Url__c;
+        String clientId = slackApp.Client_ID__c;
+        String clientSecret = slackApp.Client_Secret__c;
+        String siteUrl = slackApp.Site_Url__c;
 
         Http http = new Http();
         HttpRequest request = new HttpRequest();
@@ -84,17 +84,17 @@ global class SlackParseRequest {
         Map<String, Object> authedUser = (Map<String, Object>)parsedJson.get('authed_user');
 
         // Creating new Slack Channel Record
-        timoverbrugghe__Slack_Channel__c slackChannel = new timoverbrugghe__Slack_Channel__c(
-            timoverbrugghe__Endpoint_URL__c = (String) incomingwebhook.get('url'),
+        Slack_Channel__c slackChannel = new Slack_Channel__c(
+            Endpoint_URL__c = (String) incomingwebhook.get('url'),
             Name = (String) incomingwebhook.get('channel'),
-            timoverbrugghe__Access_Token__c = (String) parsedJson.get('access_token'),
-            timoverbrugghe__Channel_ID__c = (String) incomingwebhook.get('channel_id'),
-            timoverbrugghe__User_ID__c = (String) authedUser.get('id')
+            Access_Token__c = (String) parsedJson.get('access_token'),
+            Channel_ID__c = (String) incomingwebhook.get('channel_id'),
+            User_ID__c = (String) authedUser.get('id')
         );
 
         // Updating User ID & Access Token in the Slack App Record
-        slackApp.timoverbrugghe__Access_Token__c = (String) parsedJson.get('access_token');
-        slackApp.timoverbrugghe__User_ID__c = (String) authedUser.get('id');
+        slackApp.Access_Token__c = (String) parsedJson.get('access_token');
+        slackApp.User_ID__c = (String) authedUser.get('id');
 
         // Invite bot to the channel so that ephemeral messages work
         Http http2 = new Http();
@@ -102,19 +102,19 @@ global class SlackParseRequest {
         request2.setEndPoint('https://slack.com/api/conversations.join');
         request2.setMethod('POST');
         request2.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request2.setHeader('Authorization', 'Bearer ' + slackChannel.timoverbrugghe__Access_Token__c);
-        request2.setBody('channel=' + slackChannel.timoverbrugghe__Channel_ID__c);
+        request2.setHeader('Authorization', 'Bearer ' + slackChannel.Access_Token__c);
+        request2.setBody('channel=' + slackChannel.Channel_ID__c);
         HttpResponse response2 = http2.send(request2);
 
         // Committing changes to the database
-        upsert slackChannel timoverbrugghe__Endpoint_URL__c;
+        upsert slackChannel Endpoint_URL__c;
         upsert slackApp;
 
         // Redirect back to homescreen
         String orgUrl = System.URL.getOrgDomainUrl().toExternalForm();
 
         RestContext.response.statusCode = 301;
-        RestContext.response.addHeader('Location', orgUrl + '/lightning/n/timoverbrugghe__Slack_Demo_Home');
+        RestContext.response.addHeader('Location', orgUrl + '/lightning/n/Slack_Demo_Home');
         RestContext.response.addHeader('http-equiv','refresh');
     }
 

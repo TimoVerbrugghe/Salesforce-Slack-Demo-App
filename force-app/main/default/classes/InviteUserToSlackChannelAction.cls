@@ -23,7 +23,7 @@ global class InviteUserToSlackChannelAction {
 
     global class InviteUserToSlackChannelRequest {
         @InvocableVariable(required=true)
-        global timoverbrugghe__Slack_Channel__c slackChannel;
+        global Slack_Channel__c slackChannel;
     }  
 
     global class InviteUserToSlackChannelResult {

@@ -29,14 +29,14 @@ public class SlackActions {
             Map<String, Object> channel = (Map<String, Object>)parsedJson.get('channel');
   
             // Creating new Slack Channel Record
-            timoverbrugghe__Slack_Channel__c slackChannel = new timoverbrugghe__Slack_Channel__c(
+            Slack_Channel__c slackChannel = new Slack_Channel__c(
                 Name = (String) channel.get('name'),
-                timoverbrugghe__Channel_ID__c = (String) channel.get('id'),
-                timoverbrugghe__User_ID__c = (String) channel.get('creator')
+                Channel_ID__c = (String) channel.get('id'),
+                User_ID__c = (String) channel.get('creator')
             );
 
             // Invite user into the channel
-            inviteUserToChannelWithSlackChannelId(slackChannel.timoverbrugghe__Channel_ID__c);
+            inviteUserToChannelWithSlackChannelId(slackChannel.Channel_ID__c);
 
             insert slackChannel;
 
@@ -55,15 +55,15 @@ public class SlackActions {
 
     public static String inviteUserToChannelWithSlackChannelId(String slackChannelId) {
         // Select the first (and presumably only SlackApp available)
-        timoverbrugghe__Slack_App__c slackApp = [SELECT timoverbrugghe__Access_Token__c, timoverbrugghe__User_ID__c FROM timoverbrugghe__Slack_App__c LIMIT 1];
+        Slack_App__c slackApp = [SELECT Access_Token__c, User_ID__c FROM Slack_App__c LIMIT 1];
 
         Http http = new Http();
         HttpRequest request = new HttpRequest();
         request.setEndpoint('https://slack.com/api/conversations.invite');
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json');
-        request.setHeader('Authorization', 'Bearer ' + slackApp.timoverbrugghe__Access_Token__c);
-        String message = '{"channel" : "' + slackChannelId + '", "users": ["' + slackApp.timoverbrugghe__User_ID__c + '"]}';
+        request.setHeader('Authorization', 'Bearer ' + slackApp.Access_Token__c);
+        String message = '{"channel" : "' + slackChannelId + '", "users": ["' + slackApp.User_ID__c + '"]}';
         request.setBody(message);
 
         try {
@@ -80,8 +80,8 @@ public class SlackActions {
         }
     }
 
-    public static String inviteUserToChannelWithSalesforceChannelId(timoverbrugghe__Slack_Channel__c slackChannel) {
-        String channelId = inviteUserToChannelWithSlackChannelId(slackChannel.timoverbrugghe__Channel_ID__c);
+    public static String inviteUserToChannelWithSalesforceChannelId(Slack_Channel__c slackChannel) {
+        String channelId = inviteUserToChannelWithSlackChannelId(slackChannel.Channel_ID__c);
         return channelId;
     }
 

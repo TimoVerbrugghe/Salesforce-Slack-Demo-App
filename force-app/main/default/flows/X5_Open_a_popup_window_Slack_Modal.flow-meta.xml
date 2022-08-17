@@ -11,7 +11,7 @@
             <name>If_SlackDemoAppHomeOpenModal</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.timoverbrugghe__Action_ID__c</leftValueReference>
+                <leftValueReference>$Record.Action_ID__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>SlackDemoAppHomeOpenModal</stringValue>
