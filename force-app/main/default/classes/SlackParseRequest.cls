@@ -12,8 +12,7 @@ global class SlackParseRequest {
 
             // Get button press info
             List<Object> actions = (List<Object>)parsedJson.get('actions');
-            Map<String, Object> container = (Map<String, Object>)parsedJson.container;
-            Map<String, Object> user = (Map<String, Object>)parsedJson.user;
+            Map<String, Object> user = (Map<String, Object>)parsedJson.get('user');
             Map<String, Object> firstAction = (Map<String, Object>)actions[0];
             
             // Create a new Slack Response object & Platform Event
@@ -47,7 +46,7 @@ global class SlackParseRequest {
             // Try to add channel ID (will only be there if action came from a message in a channel, not on the home page)
             if(parsedJson.containsKey('channel')) {
                 Map<String, Object> channel = (Map<String, Object>)parsedJson.get('channel');
-                slackResponse.Channel_ID_c = (String) channel.get('id');
+                slackResponse.Channel_ID__c = (String) channel.get('id');
                 slackButtonClickedEvent.Channel_ID__c = (String) channel.get('id');
             }
 

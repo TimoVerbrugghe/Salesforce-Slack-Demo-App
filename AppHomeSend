@@ -1,0 +1,143 @@
+{
+	"type": "home",
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Welcome to Alpine Group, Lauren"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Contact Alpine Group :phone:",
+						"emoji": true
+					},
+					"style": "primary",
+					"value": "create_task"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Help",
+						"emoji": true
+					},
+					"value": "help"
+				}
+			]
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "image",
+					"image_url": "https://api.slack.com/img/blocks/bkb_template_images/placeholder.png",
+					"alt_text": "placeholder"
+				}
+			]
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Your Alpine Group Representative*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Chantelle Rep\n Jet Import Sr. Account Executive\n +32478941255"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/kqfPSDm/Chantelle-Rep.png",
+				"alt_text": "cute cat"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Planned Visits*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Your Alpine Group Representative will visit your store at *12th of April, 10:00*."
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Suggest Another Time",
+					"emoji": true
+				},
+				"value": "PlanNewVisit",
+				"action_id": "PlanNewVisit"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Your Alpine Group Promotions*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Summer Splash Promotion :sunny:*\n Summer is here and people need their Energy Boost! We are providing a 10% discount on all Red Bull products!"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/6J8HtMT/redbullsummer.jpg",
+				"alt_text": "alt text for image"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Endcap Display Promotion :moneybag:*\n Qualify for an additional investment in your store if you sign up now for our new endcap displays!"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/GWXhFzv/redbullcheckout.jpg",
+				"alt_text": "alt text for image"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Modify Promotions",
+						"emoji": true
+					},
+					"value": "modify_promotions"
+				}
+			]
+		}
+	]
+}

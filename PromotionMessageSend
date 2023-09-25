@@ -1,0 +1,85 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Hi everybody, We are starting with our new end-of-year promotions! You can find a summary below. Just click below on the promotions that you're interested in and your Account Manager will discuss it during the next visit!"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Summer Splash Promotion :sunny:*\n Summer is here and people need their Energy Boost! We are providing a 10% discount on all Red Bull products!"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/6J8HtMT/redbullsummer.jpg",
+				"alt_text": "alt text for image"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Endcap Display Promotion :moneybag:*\n Qualify for an additional investment in your store if you sign up now for our new endcap displays!"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/GWXhFzv/redbullcheckout.jpg",
+				"alt_text": "alt text for image"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Alpine Cooler Promotion :cold_face:*\n The first 10 stores that do an early order of our new Alpine Energy Drinks qualify for a free cooler installation."
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://i.ibb.co/3F8HMz4/redbullfridge.jpg",
+				"alt_text": "alt text for image"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Summer Splash :sunny:",
+						"emoji": true
+					},
+					"value": "promotion_summer"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Endcap Display :moneybag:",
+						"emoji": true
+					},
+					"value": "promotion_endcap"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Cooler :cold_face:",
+						"emoji": true
+					},
+					"value": "promotion_cooler"
+				}
+			]
+		}
+	]
+}
